@@ -1,0 +1,28 @@
+{
+  "short_name": "سیناپس",
+  "name": "سیناپس | دستیار هوشمند دارویی",
+  "description": "سیناپس، دستیار هوشمند دارویی شما. اطلاعات جامع داروها، بررسی تداخلات، راهنمای فارماکوتراپی و موارد دیگر را با قدرت هوش مصنوعی Gemini به سرعت دریافت کنید.",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    },
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}
