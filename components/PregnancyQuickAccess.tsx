@@ -1,17 +1,34 @@
 
-import React from 'react';
-import { pregnancyDrugCategories, PregnancyDrugCategory } from '../data/pregnancyDrugCategories';
+import React, { useState, useEffect } from 'react';
+import type { PregnancyDrugCategory } from '../data/pregnancyDrugCategories';
+import { SpinnerIcon } from './icons/SpinnerIcon';
 
 interface PregnancyQuickAccessProps {
     onSelectCategory: (category: PregnancyDrugCategory) => void;
 }
 
 export const PregnancyQuickAccess: React.FC<PregnancyQuickAccessProps> = ({ onSelectCategory }) => {
+    const [categories, setCategories] = useState<PregnancyDrugCategory[]>([]);
+
+    useEffect(() => {
+        import('../data/pregnancyDrugCategories').then(module => {
+            setCategories(module.pregnancyDrugCategories);
+        });
+    }, []);
+
+    if (categories.length === 0) {
+        return (
+            <div className="flex justify-center mt-12">
+                <SpinnerIcon className="h-10 w-10 text-gray-400" />
+            </div>
+        );
+    }
+
     return (
         <div className="mt-8 text-center animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">مرور سریع دسته‌بندی‌های رایج در بارداری</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {pregnancyDrugCategories.map((cat) => (
+                {categories.map((cat) => (
                     <button
                         key={cat.name}
                         onClick={() => onSelectCategory(cat)}

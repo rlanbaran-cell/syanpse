@@ -1,4 +1,6 @@
 
+import type React from 'react';
+
 export interface BilingualText {
   fa: string;
   en: string;
@@ -36,14 +38,6 @@ export interface PharmacotherapyInfo {
   references: string;
 }
 
-export interface MedicalEquipmentInfo {
-  equipmentName: string;
-  description: string;
-  primaryUse: string;
-  keyFeatures: string;
-  imageBase64?: string;
-}
-
 export interface SupplementInfo {
     supplementName: string;
     brand?: string;
@@ -68,7 +62,15 @@ export interface ToxicologyInfo {
   references: string;
 }
 
-// FIX: Add InfantFormulaInfo interface based on its usage in the data file.
+// FIX: Added MedicalEquipmentInfo, InfantFormulaInfo, and SpecialMedicationInfo types.
+export interface MedicalEquipmentInfo {
+  equipmentName: string;
+  description: string;
+  primaryUse: string;
+  keyFeatures: string;
+  imageBase64?: string;
+}
+
 export interface InfantFormulaInfo {
   brand: string;
   name: string;
@@ -79,7 +81,6 @@ export interface InfantFormulaInfo {
   keyIngredients: string;
 }
 
-// FIX: Add SpecialMedicationInfo interface based on its usage in data and component files.
 export interface SpecialMedicationInfo {
   name: string;
   brand: string;
@@ -90,7 +91,6 @@ export interface SpecialMedicationInfo {
   keyPoints: string;
   imageBase64?: string;
 }
-
 
 export interface SavedDrugItem {
   id: string;
@@ -135,7 +135,7 @@ export interface SavedToxicologyItem {
   data: ToxicologyInfo;
 }
 
-// FIX: Add SavedInfantFormulaItem interface.
+// FIX: Added SavedInfantFormulaItem and SavedSpecialMedicationItem types.
 export interface SavedInfantFormulaItem {
   id: string;
   type: 'formula';
@@ -143,7 +143,6 @@ export interface SavedInfantFormulaItem {
   data: InfantFormulaInfo;
 }
 
-// FIX: Add SavedSpecialMedicationItem interface.
 export interface SavedSpecialMedicationItem {
   id: string;
   type: 'special';
@@ -152,5 +151,31 @@ export interface SavedSpecialMedicationItem {
 }
 
 
-// FIX: Update SavedItem to be a union of all possible saved item types.
+// FIX: Updated SavedItem to include new saved item types.
 export type SavedItem = SavedDrugItem | SavedInteractionItem | SavedTherapyItem | SavedPregnancyItem | SavedSupplementItem | SavedToxicologyItem | SavedInfantFormulaItem | SavedSpecialMedicationItem;
+
+// Category Types for Guides
+export interface ToxicologyCategory {
+    name: string;
+    icon: React.ReactNode;
+    substances: string[];
+}
+
+// FIX: Added missing category types.
+export interface InfantFormulaCategory {
+    name: string;
+    icon: React.ReactNode;
+    items: string[];
+}
+
+export interface SpecialMedicationSubCategory {
+  name: string;
+  items: string[];
+}
+
+export interface SpecialMedicationCategory {
+  name: string;
+  icon: React.ReactNode;
+  items?: string[];
+  subCategories?: SpecialMedicationSubCategory[];
+}

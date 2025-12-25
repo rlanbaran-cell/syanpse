@@ -8,7 +8,7 @@ import type { SupplementInfo } from '../types';
 import { supplementList } from '../data/supplementList';
 import { SearchSuggestions } from './SearchSuggestions';
 
-export const SupplementSearch: React.FC = () => {
+const SupplementSearch: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [supplementInfo, setSupplementInfo] = useState<SupplementInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -110,3 +110,5 @@ export const SupplementSearch: React.FC = () => {
     </div>
   );
 };
+
+export default SupplementSearch;

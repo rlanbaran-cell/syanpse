@@ -17,14 +17,9 @@ import { LeafIcon } from './icons/LeafIcon';
 import { ShieldCheckIcon } from './icons/ShieldCheckIcon';
 import { BiohazardIcon } from './icons/BiohazardIcon';
 import { LanguageSwitcher, Language } from './LanguageSwitcher';
-// FIX: Import components and icons for new saved item types.
-import { InfantFormulaCard } from './InfantFormulaCard';
-import { SpecialMedicationCard } from './SpecialMedicationCard';
-import { BottleIcon } from './icons/BottleIcon';
-import { StarIcon } from './icons/StarIcon';
 
 
-export const SavedItems: React.FC = () => {
+const SavedItems: React.FC = () => {
     const [items, setItems] = useState<SavedItem[]>([]);
     const [selectedItem, setSelectedItem] = useState<SavedItem | null>(null);
     const [interactionLanguage, setInteractionLanguage] = useState<Language>('fa');
@@ -107,13 +102,6 @@ export const SavedItems: React.FC = () => {
                 return <SupplementInfoCard supplementInfo={selectedItem.data} showSaveButton={false} />;
             case 'toxicology':
                 return <ToxicologyInfoCard info={selectedItem.data} showSaveButton={false} />;
-            // FIX: Add rendering cases for the new saved item types.
-            case 'formula':
-                // @ts-ignore
-                return <InfantFormulaCard info={selectedItem.data} showSaveButton={false} />;
-            case 'special':
-                // @ts-ignore
-                return <SpecialMedicationCard info={selectedItem.data} showSaveButton={false} />;
             default:
                 return null;
         }
@@ -127,9 +115,6 @@ export const SavedItems: React.FC = () => {
             case 'pregnancy': return <PregnancyIcon className="h-5 w-5 text-pink-500 flex-shrink-0" />;
             case 'supplement': return <LeafIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />;
             case 'toxicology': return <BiohazardIcon className="h-5 w-5 text-red-500 flex-shrink-0" />;
-            // FIX: Add icons for the new saved item types.
-            case 'formula': return <BottleIcon className="h-5 w-5 text-cyan-500 flex-shrink-0" />;
-            case 'special': return <StarIcon className="h-5 w-5 text-yellow-500 flex-shrink-0" />;
             default: return null;
         }
     }
@@ -167,3 +152,5 @@ export const SavedItems: React.FC = () => {
         </div>
     );
 };
+
+export default SavedItems;

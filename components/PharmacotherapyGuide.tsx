@@ -7,7 +7,7 @@ import type { PharmacotherapyInfo } from '../types';
 import { ClipboardIcon } from './icons/ClipboardIcon';
 import { SearchSuggestions } from './SearchSuggestions';
 
-export const PharmacotherapyGuide: React.FC = () => {
+const PharmacotherapyGuide: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [therapyInfo, setTherapyInfo] = useState<PharmacotherapyInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -145,3 +145,5 @@ export const PharmacotherapyGuide: React.FC = () => {
     </div>
   );
 };
+
+export default PharmacotherapyGuide;

@@ -7,14 +7,13 @@ import { fetchDrugInfo } from '../services/geminiService';
 import { saveDrugInfo, getDrugInfo } from '../services/cacheService';
 import * as historyService from '../services/historyService';
 import type { DrugInfo } from '../types';
-import { drugList } from '../data/drugList';
 import { QuickAccessCategories } from './QuickAccessCategories';
 import { DrugCategoryView } from './DrugCategoryView';
 import type { DrugCategory } from '../data/drugCategories';
 import { SearchSuggestions } from './SearchSuggestions';
 import { SearchHistory } from './SearchHistory';
 
-export const SingleDrugSearch: React.FC = () => {
+const SingleDrugSearch: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [drugInfo, setDrugInfo] = useState<DrugInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -22,9 +21,13 @@ export const SingleDrugSearch: React.FC = () => {
   const [isFromCache, setIsFromCache] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<DrugCategory | null>(null);
   const [history, setHistory] = useState<string[]>([]);
+  const [suggestionList, setSuggestionList] = useState<string[]>([]);
 
   useEffect(() => {
     setHistory(historyService.getHistory());
+    import('../data/drugList').then(module => {
+        setSuggestionList(module.drugList);
+    });
   }, []);
 
   const handleSearch = useCallback(async (query: string) => {
@@ -161,10 +164,12 @@ export const SingleDrugSearch: React.FC = () => {
         onSuggestionSelect={onSuggestionSelect}
         onSubmit={onSearchSubmit}
         isLoading={isLoading}
-        suggestionList={drugList}
+        suggestionList={suggestionList}
         placeholder="مثال: آتورواستاتین"
       />
       <div className="mt-6">{renderContent()}</div>
     </div>
   );
 };
+
+export default SingleDrugSearch;

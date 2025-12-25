@@ -1,25 +1,36 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRightIcon } from './icons/ArrowRightIcon';
-import type { InfantFormulaInfo } from '../types';
-import { infantFormulaCategories, InfantFormulaCategory, preloadedFormulaInfo } from '../data/infantFormulaData';
+import type { InfantFormulaInfo, InfantFormulaCategory } from '../types';
 import { InfantFormulaCard } from './InfantFormulaCard';
 import { AlertIcon } from './icons/AlertIcon';
+import { SpinnerIcon } from './icons/SpinnerIcon';
 
 type View = 'categories' | 'list' | 'details';
 
-export const InfantFormulaGuide: React.FC = () => {
+const InfantFormulaGuide: React.FC = () => {
     const [view, setView] = useState<View>('categories');
     const [selectedCategory, setSelectedCategory] = useState<InfantFormulaCategory | null>(null);
     const [formulaInfo, setFormulaInfo] = useState<InfantFormulaInfo | null>(null);
+    const [categories, setCategories] = useState<InfantFormulaCategory[]>([]);
+    const [preloadedInfo, setPreloadedInfo] = useState<Map<string, InfantFormulaInfo>>(new Map());
+    const [isLoading, setIsLoading] = useState(true);
     
+    useEffect(() => {
+        import('../data/infantFormulaData').then(module => {
+            setCategories(module.infantFormulaCategories);
+            setPreloadedInfo(module.preloadedFormulaInfo);
+            setIsLoading(false);
+        });
+    }, []);
+
     const handleCategorySelect = (category: InfantFormulaCategory) => {
         setSelectedCategory(category);
         setView('list');
     };
 
     const handleFormulaSelect = (formulaName: string) => {
-        const info = preloadedFormulaInfo.get(formulaName);
+        const info = preloadedInfo.get(formulaName);
         setFormulaInfo(info || null);
         setView('details');
     };
@@ -36,13 +47,21 @@ export const InfantFormulaGuide: React.FC = () => {
     };
 
     const renderContent = () => {
+        if (isLoading) {
+            return (
+                <div className="flex justify-center mt-12">
+                    <SpinnerIcon className="h-10 w-10 text-gray-400" />
+                </div>
+            );
+        }
+
         if (view === 'categories') {
             return (
                  <div className="mt-8 text-center animate-fade-in">
                     <h2 className="text-xl font-semibold text-gray-700 mb-1">راهنمای انتخاب شیر خشک</h2>
                     <p className="text-gray-500 mb-4">برای مشاهده محصولات، یک دسته‌بندی را انتخاب کنید.</p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {infantFormulaCategories.map((cat) => (
+                        {categories.map((cat) => (
                             <button
                                 key={cat.name}
                                 onClick={() => handleCategorySelect(cat)}
@@ -118,3 +137,5 @@ export const InfantFormulaGuide: React.FC = () => {
 
     return <div>{renderContent()}</div>;
 };
+
+export default InfantFormulaGuide;

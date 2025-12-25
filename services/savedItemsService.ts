@@ -54,13 +54,13 @@ export const isToxicologySaved = (substanceName: string): boolean => {
     return items.some(item => item.type === 'toxicology' && item.title.trim().toLowerCase() === titleToFind);
 };
 
-// FIX: Add isFormulaSaved function to check if an infant formula item is already saved.
+// FIX: Added missing isFormulaSaved function.
 export const isFormulaSaved = (formulaName: string): boolean => {
     const items = getSavedItems();
     return items.some(item => item.type === 'formula' && item.title.trim().toLowerCase() === formulaName.trim().toLowerCase());
 };
 
-// FIX: Add isSpecialMedicationSaved function to check if a special medication item is already saved.
+// FIX: Added missing isSpecialMedicationSaved function.
 export const isSpecialMedicationSaved = (medicationName: string): boolean => {
     const items = getSavedItems();
     return items.some(item => item.type === 'special' && item.title.trim().toLowerCase() === medicationName.trim().toLowerCase());

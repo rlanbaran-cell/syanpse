@@ -13,7 +13,7 @@ import { InteractionResult } from './InteractionResult';
 import { ShieldCheckIcon } from './icons/ShieldCheckIcon';
 import { LanguageSwitcher, Language } from './LanguageSwitcher';
 
-export const InteractionChecker: React.FC = () => {
+const InteractionChecker: React.FC = () => {
     const [drugInput, setDrugInput] = useState('');
     const [drugListToCheck, setDrugListToCheck] = useState<string[]>([]);
     const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -210,3 +210,5 @@ export const InteractionChecker: React.FC = () => {
         </div>
     );
 };
+
+export default InteractionChecker;

@@ -1,26 +1,37 @@
 
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { ArrowRightIcon } from './icons/ArrowRightIcon';
-import type { SpecialMedicationInfo } from '../types';
-import { specialMedicationsCategories, SpecialMedicationCategory, SpecialMedicationSubCategory, preloadedSpecialMedications } from '../data/specialMedicationsData';
+import type { SpecialMedicationInfo, SpecialMedicationCategory, SpecialMedicationSubCategory } from '../types';
 import { SpecialMedicationCard } from './SpecialMedicationCard';
 import { AlertIcon } from './icons/AlertIcon';
 import { SearchIcon } from './icons/SearchIcon';
+import { SpinnerIcon } from './icons/SpinnerIcon';
 
 type View = 'categories' | 'subCategories' | 'list' | 'details';
 
-export const SpecialMedicationsGuide: React.FC = () => {
+const SpecialMedicationsGuide: React.FC = () => {
     const [view, setView] = useState<View>('categories');
     const [selectedCategory, setSelectedCategory] = useState<SpecialMedicationCategory | null>(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState<SpecialMedicationSubCategory | null>(null);
     const [medicationInfo, setMedicationInfo] = useState<SpecialMedicationInfo | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [categories, setCategories] = useState<SpecialMedicationCategory[]>([]);
+    const [preloadedMeds, setPreloadedMeds] = useState<Map<string, SpecialMedicationInfo>>(new Map());
+    
+    const allMedications = Array.from(preloadedMeds.values());
 
-    const allMedications = Array.from(preloadedSpecialMedications.values());
+    useEffect(() => {
+        import('../data/specialMedicationsData').then(module => {
+            setCategories(module.specialMedicationsCategories);
+            setPreloadedMeds(module.preloadedSpecialMedications);
+            setIsLoading(false);
+        });
+    }, []);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
-        // When user types, reset the browsing view state but don't hide details yet
         if (view !== 'details') {
             setView('categories');
             setSelectedCategory(null);
@@ -44,7 +55,7 @@ export const SpecialMedicationsGuide: React.FC = () => {
     };
 
     const handleMedicationSelect = (medicationName: string) => {
-        const info = preloadedSpecialMedications.get(medicationName);
+        const info = preloadedMeds.get(medicationName);
         setMedicationInfo(info || null);
         setView('details');
     };
@@ -73,7 +84,7 @@ export const SpecialMedicationsGuide: React.FC = () => {
             <h2 className="text-xl font-semibold text-gray-700 mb-1">راهنمای داروهای خاص</h2>
             <p className="text-gray-500 mb-4">برای مشاهده راهنمای مصرف، یک دسته‌بندی را انتخاب کنید یا نام دارو را جستجو کنید.</p>
             <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-                {specialMedicationsCategories.map((cat) => (
+                {categories.map((cat) => (
                     <button
                         key={cat.name}
                         onClick={() => handleCategorySelect(cat)}
@@ -88,6 +99,14 @@ export const SpecialMedicationsGuide: React.FC = () => {
     );
     
     const renderContent = () => {
+        if (isLoading) {
+            return (
+                <div className="flex justify-center mt-12">
+                    <SpinnerIcon className="h-10 w-10 text-gray-400" />
+                </div>
+            );
+        }
+        
         if (view === 'categories') {
             return renderCategories();
         }
@@ -187,7 +206,8 @@ export const SpecialMedicationsGuide: React.FC = () => {
     };
     
     const renderSearchResults = () => {
-        const filtered = allMedications.filter(med => 
+        // FIX: Explicitly type `med` to resolve type inference issue.
+        const filtered = allMedications.filter((med: SpecialMedicationInfo) => 
             med.name.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
             med.brand.toLowerCase().includes(searchQuery.trim().toLowerCase())
         );
@@ -214,7 +234,7 @@ export const SpecialMedicationsGuide: React.FC = () => {
                 <h2 className="text-xl font-bold text-gray-800 mb-4">نتایج جستجو</h2>
                 {filtered.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        {filtered.map(med => (
+                        {filtered.map((med: SpecialMedicationInfo) => (
                             <button
                                 key={med.name}
                                 onClick={() => handleMedicationSelect(med.name)}
@@ -252,3 +272,5 @@ export const SpecialMedicationsGuide: React.FC = () => {
         </div>
     );
 };
+
+export default SpecialMedicationsGuide;

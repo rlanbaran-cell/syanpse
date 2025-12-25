@@ -1,6 +1,7 @@
 
 import React from 'react';
-import type { InfantFormulaInfo } from '../types';
+// FIX: Import InfantFormulaCategory from types.ts and remove local definition.
+import type { InfantFormulaInfo, InfantFormulaCategory } from '../types';
 import { BottleIcon } from '../components/icons/BottleIcon';
 import { HeartIcon } from '../components/icons/HeartIcon';
 import { ShieldCheckIcon } from '../components/icons/ShieldCheckIcon';
@@ -8,12 +9,6 @@ import { BabyIcon } from '../components/icons/BabyIcon';
 import { LeafIcon } from '../components/icons/LeafIcon';
 import { StomachIcon } from '../components/icons/StomachIcon';
 
-
-export interface InfantFormulaCategory {
-    name: string;
-    icon: React.ReactNode;
-    items: string[];
-}
 
 export const infantFormulaCategories: InfantFormulaCategory[] = [
     {

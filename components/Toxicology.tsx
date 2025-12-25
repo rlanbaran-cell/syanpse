@@ -1,22 +1,28 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { SearchBar } from './SearchBar';
 import { ToxicologyInfoCard } from './ToxicologyInfoCard';
 import { SpinnerIcon } from './icons/SpinnerIcon';
 import { AlertIcon } from './icons/AlertIcon';
 import { fetchToxicologyInfo } from '../services/geminiService';
-import type { ToxicologyInfo } from '../types';
-import { toxicologyCategories, ToxicologyCategory } from '../data/toxicologyCategories';
+import type { ToxicologyInfo, ToxicologyCategory } from '../types';
 import { ArrowRightIcon } from './icons/ArrowRightIcon';
 
-export const Toxicology: React.FC = () => {
+const Toxicology: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [toxicologyInfo, setToxicologyInfo] = useState<ToxicologyInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<ToxicologyCategory | null>(null);
   const [view, setView] = useState<'categories' | 'list' | 'details'>('categories');
+  const [categories, setCategories] = useState<ToxicologyCategory[]>([]);
+  const [allSubstances, setAllSubstances] = useState<string[]>([]);
 
-  const allSubstances = toxicologyCategories.flatMap(c => c.substances);
+  useEffect(() => {
+      import('../data/toxicologyCategories').then(module => {
+          setCategories(module.toxicologyCategories);
+          setAllSubstances(module.toxicologyCategories.flatMap(c => c.substances));
+      });
+  }, []);
 
   const handleSearch = useCallback(async (query: string) => {
     if (!query.trim()) {
@@ -147,11 +153,18 @@ export const Toxicology: React.FC = () => {
     }
 
     if (view === 'categories') {
+        if (categories.length === 0) {
+            return (
+                <div className="flex justify-center mt-12">
+                    <SpinnerIcon className="h-10 w-10 text-gray-400" />
+                </div>
+            );
+        }
         return (
             <div className="mt-8 text-center animate-fade-in">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">دسترسی سریع به مسمومیت‌های شایع</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {toxicologyCategories.map((cat) => (
+                    {categories.map((cat) => (
                         <button
                             key={cat.name}
                             onClick={() => handleCategorySelect(cat)}
@@ -184,3 +197,5 @@ export const Toxicology: React.FC = () => {
     </div>
   );
 };
+
+export default Toxicology;

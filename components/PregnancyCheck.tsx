@@ -11,7 +11,7 @@ import { PregnancyQuickAccess } from './PregnancyQuickAccess';
 import { PregnancyCategoryView } from './PregnancyCategoryView';
 import type { PregnancyDrugCategory } from '../data/pregnancyDrugCategories';
 
-export const PregnancyCheck: React.FC = () => {
+const PregnancyCheck: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [pregnancyInfo, setPregnancyInfo] = useState<PregnancyInfo | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -130,3 +130,5 @@ export const PregnancyCheck: React.FC = () => {
     </div>
   );
 };
+
+export default PregnancyCheck;

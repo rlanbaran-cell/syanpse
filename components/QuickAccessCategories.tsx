@@ -1,17 +1,34 @@
 
-import React from 'react';
-import { drugCategories, DrugCategory } from '../data/drugCategories';
+import React, { useState, useEffect } from 'react';
+import type { DrugCategory } from '../data/drugCategories';
+import { SpinnerIcon } from './icons/SpinnerIcon';
 
 interface QuickAccessCategoriesProps {
     onSelectCategory: (category: DrugCategory) => void;
 }
 
 export const QuickAccessCategories: React.FC<QuickAccessCategoriesProps> = ({ onSelectCategory }) => {
+    const [categories, setCategories] = useState<DrugCategory[]>([]);
+
+    useEffect(() => {
+        import('../data/drugCategories').then(module => {
+            setCategories(module.drugCategories);
+        });
+    }, []);
+
+    if (categories.length === 0) {
+        return (
+            <div className="flex justify-center mt-12">
+                <SpinnerIcon className="h-10 w-10 text-gray-400" />
+            </div>
+        );
+    }
+
     return (
         <div className="mt-8 text-center animate-fade-in">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">مرور سریع دسته‌بندی‌ها (مبتنی بر کاتزونگ)</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {drugCategories.map((cat) => (
+                {categories.map((cat) => (
                     <button
                         key={cat.name}
                         onClick={() => onSelectCategory(cat)}

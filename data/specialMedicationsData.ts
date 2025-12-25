@@ -1,20 +1,9 @@
 
 import React from 'react';
-import type { SpecialMedicationInfo } from '../types';
+// FIX: Import SpecialMedicationInfo and SpecialMedicationCategory from types.ts and remove local definitions.
+import type { SpecialMedicationInfo, SpecialMedicationCategory } from '../types';
 import { SyringeIcon } from '../components/icons/SyringeIcon';
 import { InhalerIcon } from '../components/icons/InhalerIcon';
-
-export interface SpecialMedicationSubCategory {
-    name: string;
-    items: string[];
-}
-
-export interface SpecialMedicationCategory {
-    name: string;
-    icon: React.ReactNode;
-    items?: string[];
-    subCategories?: SpecialMedicationSubCategory[];
-}
 
 export const specialMedicationsCategories: SpecialMedicationCategory[] = [
     {
